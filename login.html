@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BudgetCargo Ops Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="login.js"></script>
+  </head>
+  <body class="login-body">
+    <main class="login-shell">
+      <section class="login-panel">
+        <div class="brand login-brand">
+          <div class="logo-mark">B</div>
+          <div>
+            <span class="brand-name">BudgetCargo Ops</span>
+            <p class="brand-tagline">Secure access to orders</p>
+          </div>
+        </div>
+        <p class="login-subtitle">Create an ops account and use your admin token to manage shipments.</p>
+
+        <div class="login-tabs">
+          <button class="login-tab active" data-tab="register">Create account</button>
+          <button class="login-tab" data-tab="login">Login</button>
+        </div>
+
+        <form id="registerForm" class="login-form active" autocomplete="off">
+          <label>
+            Work email
+            <input type="email" name="email" placeholder="ops@budgetcargo.com" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" placeholder="At least 8 characters" minlength="8" required />
+          </label>
+          <label>
+            Confirm password
+            <input type="password" name="confirm" placeholder="Repeat password" minlength="8" required />
+          </label>
+          <label>
+            Admin token
+            <input type="password" name="token" placeholder="Paste ADMIN_DASH_TOKEN" required />
+          </label>
+          <button class="cta" type="submit">Create ops profile</button>
+          <p class="login-hint">Account data is stored locally for demo purposes. Use real auth in production.</p>
+        </form>
+
+        <form id="loginForm" class="login-form" autocomplete="off">
+          <label>
+            Work email
+            <input type="email" name="email" placeholder="ops@budgetcargo.com" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" placeholder="Enter password" minlength="8" required />
+          </label>
+          <button class="cta" type="submit">Login to dashboard</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

@@ -9,12 +9,15 @@ const timelineList = document.getElementById('timelineList');
 const contactCard = document.getElementById('contactCard');
 const adminTokenInput = document.getElementById('adminTokenInput');
 const saveTokenButton = document.getElementById('saveTokenButton');
+const logoutButton = document.getElementById('logoutButton');
+const userBadge = document.getElementById('userBadge');
 
 const STATUS_OPTIONS = ['queued', 'processing', 'awaiting_pickup', 'completed', 'cancelled'];
 const TOKEN_STORAGE_KEY = 'bc_admin_token';
+const SESSION_STORAGE_KEY = 'bc_active_user';
 
 function getToken() {
-  return localStorage.getItem(TOKEN_STORAGE_KEY) || '';
+  return localStorage.getItem(TOKEN_STORAGE_KEY) || getSession()?.token || '';
 }
 
 function saveToken(value) {
@@ -23,6 +26,33 @@ function saveToken(value) {
   } else {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
   }
+}
+
+function getSession() {
+  const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    console.warn('Failed to parse session payload', error);
+    return null;
+  }
+}
+
+function ensureSession() {
+  const session = getSession();
+  if (!session?.email) {
+    window.location.href = 'login.html';
+    return null;
+  }
+  if (userBadge) {
+    userBadge.textContent = `Ops: ${session.email}`;
+  }
+  if (adminTokenInput && session.token && !adminTokenInput.value) {
+    adminTokenInput.value = session.token;
+    saveToken(session.token);
+  }
+  return session;
 }
 
 async function fetchOrders(params = {}) {
@@ -44,6 +74,12 @@ async function fetchOrders(params = {}) {
     }
 
     const response = await fetch(url, { headers });
+    if (response.status === 401) {
+      alert('Session expired or unauthorized. Please login again.');
+      handleLogout();
+      return;
+    }
+
     if (!response.ok) {
       throw new Error('Failed to fetch orders');
     }
@@ -153,6 +189,9 @@ saveTokenButton?.addEventListener('click', () => {
 });
 
 window.addEventListener('load', () => {
+  const session = ensureSession();
+  if (!session) return;
+
   const storedToken = getToken();
   if (storedToken && adminTokenInput) {
     adminTokenInput.value = storedToken;
@@ -190,4 +229,10 @@ async function updateStatus(id, status) {
     alert(error.message || 'Unable to update status');
     connectionStatus.textContent = 'Error';
   }
+}
+
+function handleLogout() {
+  sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  localStorage.removeItem(TOKEN_STORAGE_KEY);
+  window.location.href = 'login.html';
 }
