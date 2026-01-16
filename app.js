@@ -3,6 +3,8 @@ const orderSummary = document.getElementById('orderSummary');
 const summaryTitle = orderSummary?.querySelector('h3');
 const summaryDesc = orderSummary?.querySelector('.summary-desc');
 const summaryList = orderSummary?.querySelector('ul');
+const summaryAlert = document.createElement('p');
+summaryAlert.className = 'summary-alert';
 const scrollButtons = document.querySelectorAll('[data-scroll]');
 
 scrollButtons.forEach((btn) => {
@@ -22,22 +24,6 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
-function computeRate(weight) {
-  if (weight <= 5) {
-    return { label: '0 – 5kg flat rate', cost: 45 };
-  }
-
-  if (weight <= 10) {
-    return { label: '5 – 10kg flat rate', cost: 82 };
-  }
-
-  if (weight <= 20) {
-    return { label: '10 – 20kg band', cost: weight * 8.3 };
-  }
-
-  return { label: '20kg+ economy rate', cost: weight * 7.5 };
-}
-
 function buildSummaryItems(data) {
   const { name, email, phone, description, weight, delivery, addOns, quote, reference } = data;
 
@@ -47,18 +33,22 @@ function buildSummaryItems(data) {
     `Items: ${description}`,
     `Weight: ${weight.toFixed(1)} kg (${quote.baseLabel})`,
     `Add-ons: ${addOns.length ? addOns.join(', ') : 'None'}`,
-    `Delivery: ${delivery === 'home' ? 'Premium door delivery' : delivery === 'blantyre' ? 'Blantyre partner depot' : 'Lilongwe HQ pickup'}`,
+    `Delivery: ${delivery}`,
     `Automation: Consolidation ID ${reference} issued. Customs prep queued.`,
-    `Estimated total: ${formatCurrency(quote.total)}`,
+    `Estimated total: ${formatCurrency(quote.grandTotal)}`,
   ];
 }
 
-function renderSummary(items, reference) {
+function renderSummary(items, reference, nextSteps = []) {
   if (!summaryList || !summaryTitle || !summaryDesc) return;
 
   summaryTitle.textContent = `Quote ready · Ref ${reference}`;
   summaryDesc.textContent = 'We emailed your consolidation ID. Pay once weight is confirmed.';
   summaryList.innerHTML = '';
+  summaryAlert.textContent = nextSteps.length ? `Next steps: ${nextSteps.join(' → ')}` : '';
+  if (nextSteps.length && !summaryAlert.isConnected) {
+    orderSummary?.insertBefore(summaryAlert, summaryList);
+  }
 
   items.forEach((entry) => {
     const li = document.createElement('li');
@@ -67,7 +57,23 @@ function renderSummary(items, reference) {
   });
 }
 
-orderForm?.addEventListener('submit', (event) => {
+async function submitOrder(payload) {
+  const response = await fetch('/api/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    const message = errorBody.error || 'Failed to submit order';
+    throw new Error(message);
+  }
+
+  return response.json();
+}
+
+orderForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const formData = new FormData(orderForm);
@@ -77,22 +83,6 @@ orderForm?.addEventListener('submit', (event) => {
     return;
   }
 
-  const base = computeRate(weight);
-  let total = base.cost;
-  const addOns = [];
-
-  if (formData.get('priority')) {
-    total += 12;
-    addOns.push('Priority flight (+£12)');
-  }
-
-  if (formData.get('insurance')) {
-    total += 6;
-    addOns.push('Enhanced insurance (+£6)');
-  }
-
-  const reference = `BC-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000 + 1000)}`;
-
   const payload = {
     name: formData.get('name').trim(),
     email: formData.get('email').trim(),
@@ -100,28 +90,49 @@ orderForm?.addEventListener('submit', (event) => {
     description: formData.get('description').trim(),
     weight,
     delivery: formData.get('delivery'),
-    addOns,
-    reference,
-    quote: {
-      baseLabel: base.label,
-      total,
-    },
+    priority: Boolean(formData.get('priority')),
+    insurance: Boolean(formData.get('insurance')),
   };
 
-  const items = buildSummaryItems(payload);
-  renderSummary(items, reference);
+  const submitButton = orderForm.querySelector('button[type="submit"]');
+  const originalText = submitButton?.textContent;
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = 'Generating quote...';
+  }
 
-  orderSummary.classList.add('active');
+  try {
+    const result = await submitOrder(payload);
+    const summaryItems = buildSummaryItems({
+      ...payload,
+      addOns: result.addOns,
+      quote: {
+        baseLabel: result.quote.baseLabel,
+        grandTotal: result.quote.grandTotal,
+      },
+      reference: result.reference,
+      delivery: result.delivery,
+    });
+    renderSummary(summaryItems, result.reference, result.nextSteps);
+    orderSummary.classList.add('active');
 
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = `Automation triggered · ${reference}`;
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => toast.classList.add('show'));
-  setTimeout(() => {
-    toast.classList.remove('show');
-    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
-  }, 4000);
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = `Automation triggered · ${result.reference}`;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, 4000);
 
-  orderForm.reset();
+    orderForm.reset();
+  } catch (error) {
+    alert(error.message || 'Unable to submit order. Please try again.');
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = originalText;
+    }
+  }
 });

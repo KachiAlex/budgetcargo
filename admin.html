@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BudgetCargo Ops Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="admin.js"></script>
+  </head>
+  <body class="dashboard-body">
+    <header class="dashboard-header">
+      <div class="brand">
+        <div class="logo-mark">B</div>
+        <div>
+          <span class="brand-name">BudgetCargo Ops</span>
+          <p class="brand-tagline">Live order intelligence</p>
+        </div>
+      </div>
+      <div class="dashboard-meta">
+        <span id="connectionStatus" class="status-pill">Connecting…</span>
+        <button id="refreshButton" class="cta ghost-btn">Refresh</button>
+      </div>
+    </header>
+
+    <main class="dashboard-main">
+      <section class="dashboard-controls">
+        <div class="token-panel">
+          <label>
+            Admin token
+            <input type="password" id="adminTokenInput" placeholder="Paste your admin token" />
+          </label>
+          <button id="saveTokenButton" class="cta ghost-btn">Save token</button>
+        </div>
+        <label>
+          Status filter
+          <select id="statusFilter">
+            <option value="">All statuses</option>
+            <option value="queued">Queued</option>
+            <option value="processing">Processing</option>
+            <option value="awaiting_pickup">Awaiting pickup</option>
+            <option value="completed">Completed</option>
+          </select>
+        </label>
+        <label>
+          Limit
+          <input type="number" id="limitInput" value="50" min="1" max="200" />
+        </label>
+        <div class="dashboard-counts">
+          <p>
+            <span class="label">Records</span>
+            <strong id="recordCount">0</strong>
+          </p>
+          <p>
+            <span class="label">Last sync</span>
+            <strong id="lastSync">—</strong>
+          </p>
+        </div>
+      </section>
+
+      <section class="orders-table-wrapper">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Customer</th>
+              <th>Weight</th>
+              <th>Delivery</th>
+              <th>Quote</th>
+              <th>Status</th>
+              <th>Update</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <tr>
+              <td colspan="8" class="empty-state">No data yet. Trigger a refresh.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="timeline-panel">
+        <div>
+          <h2>Selected timeline</h2>
+          <p class="eyebrow">Automation events</p>
+          <ul id="timelineList" class="timeline-list">
+            <li>Select a row to inspect milestones.</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Contact snapshot</h2>
+          <p class="eyebrow">For ops follow-up</p>
+          <div id="contactCard" class="contact-card">
+            <p>Reference not selected.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
