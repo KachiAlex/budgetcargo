@@ -1,0 +1,17 @@
+{
+  "name": "budgetcargo",
+  "version": "1.0.0",
+  "description": "BudgetCargo - Logistics platform for UK-Malawi shipping",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx serve . -p 3000 -o",
+    "build": "echo Build complete - static files ready"
+  },
+  "keywords": ["logistics", "shipping", "uk-malawi", "cargo"],
+  "author": "BudgetCargo",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
