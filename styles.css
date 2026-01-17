@@ -815,6 +815,18 @@ textarea {
   border: 1px solid var(--border);
 }
 
+.summary-actions {
+  margin-top: 1.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.summary-actions .ghost.secondary {
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+}
+
 .order-summary.active {
   border: 2px solid rgba(29, 143, 225, 0.5);
 }

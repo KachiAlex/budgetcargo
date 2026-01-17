@@ -14,6 +14,14 @@ const STATUS_OPTIONS = ['queued', 'processing', 'awaiting_pickup', 'completed', 
 const TOKEN_STORAGE_KEY = 'bc_admin_token';
 const SESSION_STORAGE_KEY = 'bc_active_user';
 
+function formatCurrency(value) {
+  const num = Number(value);
+  if (Number.isNaN(num)) {
+    return '0.00';
+  }
+  return num.toFixed(2);
+}
+
 function getToken() {
   return getSession()?.token || localStorage.getItem(TOKEN_STORAGE_KEY) || '';
 }
@@ -105,7 +113,7 @@ function renderTable(rows) {
       </td>
       <td>${row.weight_kg} kg</td>
       <td>${row.delivery_option}</td>
-      <td>£${(row.grand_total ?? 0).toFixed(2)}</td>
+      <td>£${formatCurrency(row.grand_total)}</td>
       <td class="status-text">${row.status}</td>
       <td class="update-cell"></td>
       <td>${new Date(row.created_at).toLocaleString()}</td>

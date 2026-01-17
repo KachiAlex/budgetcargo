@@ -5,6 +5,9 @@ const summaryDesc = orderSummary?.querySelector('.summary-desc');
 const summaryList = orderSummary?.querySelector('ul');
 const summaryAlert = document.createElement('p');
 summaryAlert.className = 'summary-alert';
+const paymentButton = document.getElementById('paymentButton');
+const whatsappButton = document.getElementById('whatsappButton');
+const summaryActions = document.getElementById('summaryActions');
 const scrollButtons = document.querySelectorAll('[data-scroll]');
 
 scrollButtons.forEach((btn) => {
@@ -55,7 +58,26 @@ function renderSummary(items, reference, nextSteps = []) {
     li.textContent = entry;
     summaryList.appendChild(li);
   });
+
+  if (summaryActions) {
+    summaryActions.hidden = false;
+    paymentButton?.setAttribute('data-reference', reference);
+    whatsappButton?.setAttribute('data-reference', reference);
+  }
 }
+
+paymentButton?.addEventListener('click', () => {
+  const reference = paymentButton.getAttribute('data-reference');
+  if (!reference) return;
+  alert(`Payment collection occurs after weighing. Reference ${reference} has been queued.`);
+});
+
+whatsappButton?.addEventListener('click', () => {
+  const reference = whatsappButton.getAttribute('data-reference');
+  if (!reference) return;
+  const message = encodeURIComponent(`Hi BudgetCargo team, following up on reference ${reference}. Please confirm payment steps.`);
+  window.open(`https://wa.me/447756168494?text=${message}`, '_blank');
+});
 
 async function submitOrder(payload) {
   const response = await fetch('/api/orders', {

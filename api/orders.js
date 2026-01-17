@@ -94,7 +94,14 @@ module.exports = async function handler(req, res) {
 };
 
 async function handleGet(req, res, sql) {
-  if (!isAuthorized(req)) {
+  let session;
+  try {
+    session = await getAdminSession(req, sql);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to authenticate request' });
+  }
+
+  if (!session) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -240,7 +247,14 @@ async function handlePost(req, res, sql) {
 }
 
 async function handlePatch(req, res, sql) {
-  if (!isAuthorized(req)) {
+  let session;
+  try {
+    session = await getAdminSession(req, sql);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to authenticate request' });
+  }
+
+  if (!session) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -259,7 +273,7 @@ async function handlePatch(req, res, sql) {
     return res.status(400).json({ error: 'Invalid status value' });
   }
 
-  const actor = req.headers['x-admin-actor'] || 'ops-user';
+  const actor = req.headers['x-admin-actor'] || session.email || 'ops-user';
   const timelineEvent = JSON.stringify([
     {
       event: 'status_updated',
@@ -307,11 +321,24 @@ function getQueryParams(req) {
   }
 }
 
-function isAuthorized(req) {
-  const expected = process.env.ADMIN_DASH_TOKEN;
-  if (!expected) return true;
-  const provided = req.headers['x-admin-token'];
-  return Boolean(provided && provided === expected);
+async function getAdminSession(req, sql) {
+  const token = req.headers['x-admin-token'];
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const [account] = await sql`
+      select id, email
+      from admin_accounts
+      where api_token = ${token}
+      limit 1;
+    `;
+    return account || null;
+  } catch (error) {
+    console.error('Failed to verify admin token', error);
+    throw error;
+  }
 }
 
 function sendTwilioNotification(event, payload) {

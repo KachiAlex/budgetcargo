@@ -54,6 +54,7 @@ module.exports = async function handler(req, res) {
   const sql = neon(connectionString);
 
   try {
+    await ensureAdminTable(sql);
     const passwordHash = await bcrypt.hash(password, 10);
     const apiToken = crypto.randomBytes(32).toString('base64url');
 
@@ -76,3 +77,15 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Failed to create account' });
   }
 };
+
+async function ensureAdminTable(sql) {
+  await sql`
+    create table if not exists public.admin_accounts (
+      id uuid primary key default uuid_generate_v4(),
+      email text not null unique,
+      password_hash text not null,
+      api_token text not null unique,
+      created_at timestamptz not null default now()
+    )
+  `;
+}
