@@ -302,15 +302,10 @@ a {
 }
 
 .logo-mark {
-  width: 46px;
-  height: 46px;
-  border-radius: 15px;
-  background: linear-gradient(140deg, var(--blue), #54b7ff);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.35rem;
-  display: grid;
-  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  object-fit: cover;
   box-shadow: var(--shadow);
 }
 
