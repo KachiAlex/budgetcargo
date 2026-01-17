@@ -2,7 +2,6 @@ const tabs = document.querySelectorAll('.login-tab');
 const registerForm = document.getElementById('registerForm');
 const loginForm = document.getElementById('loginForm');
 
-const ACCOUNT_STORAGE_KEY = 'bc_ops_accounts';
 const SESSION_STORAGE_KEY = 'bc_active_user';
 const TOKEN_STORAGE_KEY = 'bc_admin_token';
 
@@ -16,26 +15,20 @@ tabs.forEach((tab) => {
   tab.addEventListener('click', () => switchTab(tab.dataset.tab));
 });
 
-function getAccounts() {
-  try {
-    return JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)) || {};
-  } catch (error) {
-    console.warn('Failed to parse accounts store', error);
-    return {};
+async function postJSON(url, payload) {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    const message = errorBody.error || 'Request failed';
+    throw new Error(message);
   }
-}
 
-function saveAccounts(data) {
-  localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(data));
-}
-
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hashBuffer))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+  return response.json();
 }
 
 function persistSession({ email, token }) {
@@ -53,60 +46,41 @@ function redirectToDashboard() {
 registerForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   const formData = new FormData(registerForm);
-  const email = formData.get('email').trim().toLowerCase();
-  const password = formData.get('password');
-  const confirm = formData.get('confirm');
-  const token = formData.get('token').trim();
+  const payload = {
+    email: formData.get('email').trim().toLowerCase(),
+    password: formData.get('password'),
+    confirm: formData.get('confirm'),
+    registrationCode: formData.get('registrationCode'),
+  };
 
-  if (password !== confirm) {
-    alert('Passwords do not match.');
-    return;
+  try {
+    const data = await postJSON('/api/auth/register', payload);
+    persistSession({ email: data.email, token: data.token });
+    alert('Account created. Redirecting to dashboard.');
+    redirectToDashboard();
+  } catch (error) {
+    alert(error.message);
   }
-
-  if (!token) {
-    alert('Admin token is required to create an account.');
-    return;
-  }
-
-  const accounts = getAccounts();
-  if (accounts[email]) {
-    alert('An account with this email already exists.');
-    return;
-  }
-
-  const passwordHash = await hashPassword(password);
-  accounts[email] = { passwordHash, token };
-  saveAccounts(accounts);
-  persistSession({ email, token });
-  alert('Account created. Redirecting to dashboard.');
-  redirectToDashboard();
 });
 
 loginForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   const formData = new FormData(loginForm);
-  const email = formData.get('email').trim().toLowerCase();
-  const password = formData.get('password');
+  const payload = {
+    email: formData.get('email').trim().toLowerCase(),
+    password: formData.get('password'),
+  };
 
-  const accounts = getAccounts();
-  const account = accounts[email];
-  if (!account) {
-    alert('No account found for that email.');
-    return;
+  try {
+    const data = await postJSON('/api/auth/login', payload);
+    persistSession({ email: data.email, token: data.token });
+    alert('Login successful. Redirecting to dashboard.');
+    redirectToDashboard();
+  } catch (error) {
+    alert(error.message);
   }
-
-  const hash = await hashPassword(password);
-  if (hash !== account.passwordHash) {
-    alert('Incorrect password.');
-    return;
-  }
-
-  persistSession({ email, token: account.token });
-  alert('Login successful. Redirecting to dashboard.');
-  redirectToDashboard();
 });
 
-// Auto redirect if the user already has an active session
 window.addEventListener('load', () => {
   const sessionRaw = sessionStorage.getItem(SESSION_STORAGE_KEY);
   if (sessionRaw) {

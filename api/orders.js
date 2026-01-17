@@ -3,6 +3,10 @@ const { neon } = require('@neondatabase/serverless');
 const REQUIRED_FIELDS = ['name', 'email', 'phone', 'description', 'weight', 'delivery'];
 const MAX_LIMIT = 200;
 const STATUS_VALUES = new Set(['queued', 'processing', 'awaiting_pickup', 'completed', 'cancelled']);
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+const TWILIO_WHATSAPP_FROM = process.env.TWILIO_WHATSAPP_FROM;
+const TWILIO_WHATSAPP_TO = process.env.TWILIO_WHATSAPP_TO;
 
 function parseBody(req) {
   if (req.body && typeof req.body === 'object') return req.body;
@@ -203,6 +207,14 @@ async function handlePost(req, res, sql) {
       returning id, reference, status, created_at;
     `;
 
+    sendTwilioNotification('order_created', {
+      reference,
+      customer: payload.name,
+      email: payload.email,
+      status: record.status,
+      weight: payload.weight,
+    });
+
     return res.status(201).json({
       reference,
       status: record.status,
@@ -271,6 +283,13 @@ async function handlePatch(req, res, sql) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
+    sendTwilioNotification('status_updated', {
+      reference: row.reference,
+      status: row.status,
+      actor,
+      updatedAt: row.updated_at,
+    });
+
     return res.status(200).json({ message: 'Status updated', status: row.status, timeline: row.timeline });
   } catch (error) {
     console.error('Failed to update order status', error);
@@ -293,4 +312,45 @@ function isAuthorized(req) {
   if (!expected) return true;
   const provided = req.headers['x-admin-token'];
   return Boolean(provided && provided === expected);
+}
+
+function sendTwilioNotification(event, payload) {
+  if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_WHATSAPP_FROM || !TWILIO_WHATSAPP_TO) {
+    return;
+  }
+
+  const message = buildNotificationMessage(event, payload);
+  if (!message) return;
+
+  const auth = Buffer.from(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`).toString('base64');
+  const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`;
+
+  const body = new URLSearchParams({
+    From: TWILIO_WHATSAPP_FROM,
+    To: TWILIO_WHATSAPP_TO,
+    Body: message,
+  });
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${auth}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: body.toString(),
+  }).catch((error) => {
+    console.warn('Twilio notification failed', error);
+  });
+}
+
+function buildNotificationMessage(event, payload) {
+  if (event === 'order_created') {
+    return `New order ${payload.reference}\nCustomer: ${payload.customer}\nStatus: ${payload.status}\nWeight: ${payload.weight}kg`;
+  }
+
+  if (event === 'status_updated') {
+    return `Order ${payload.reference} now ${payload.status}\nUpdated by: ${payload.actor}\nWhen: ${new Date(payload.updatedAt).toLocaleString()}`;
+  }
+
+  return null;
 }

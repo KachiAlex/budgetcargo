@@ -20,7 +20,7 @@
             <p class="brand-tagline">Secure access to orders</p>
           </div>
         </div>
-        <p class="login-subtitle">Create an ops account and use your admin token to manage shipments.</p>
+        <p class="login-subtitle">Create an ops account using the shared registration code, then sign in with your password.</p>
 
         <div class="login-tabs">
           <button class="login-tab active" data-tab="register">Create account</button>
@@ -41,11 +41,11 @@
             <input type="password" name="confirm" placeholder="Repeat password" minlength="8" required />
           </label>
           <label>
-            Admin token
-            <input type="password" name="token" placeholder="Paste ADMIN_DASH_TOKEN" required />
+            Registration code
+            <input type="password" name="registrationCode" placeholder="Ask HQ for the onboarding code" required />
           </label>
           <button class="cta" type="submit">Create ops profile</button>
-          <p class="login-hint">Account data is stored locally for demo purposes. Use real auth in production.</p>
+          <p class="login-hint">Accounts are stored securely in Neon. The registration code ensures only HQ can onboard staff.</p>
         </form>
 
         <form id="loginForm" class="login-form" autocomplete="off">

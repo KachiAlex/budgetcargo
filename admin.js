@@ -7,8 +7,6 @@ const recordCount = document.getElementById('recordCount');
 const lastSync = document.getElementById('lastSync');
 const timelineList = document.getElementById('timelineList');
 const contactCard = document.getElementById('contactCard');
-const adminTokenInput = document.getElementById('adminTokenInput');
-const saveTokenButton = document.getElementById('saveTokenButton');
 const logoutButton = document.getElementById('logoutButton');
 const userBadge = document.getElementById('userBadge');
 
@@ -17,15 +15,7 @@ const TOKEN_STORAGE_KEY = 'bc_admin_token';
 const SESSION_STORAGE_KEY = 'bc_active_user';
 
 function getToken() {
-  return localStorage.getItem(TOKEN_STORAGE_KEY) || getSession()?.token || '';
-}
-
-function saveToken(value) {
-  if (value) {
-    localStorage.setItem(TOKEN_STORAGE_KEY, value);
-  } else {
-    localStorage.removeItem(TOKEN_STORAGE_KEY);
-  }
+  return getSession()?.token || localStorage.getItem(TOKEN_STORAGE_KEY) || '';
 }
 
 function getSession() {
@@ -42,15 +32,14 @@ function getSession() {
 function ensureSession() {
   const session = getSession();
   if (!session?.email) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return null;
   }
   if (userBadge) {
     userBadge.textContent = `Ops: ${session.email}`;
   }
-  if (adminTokenInput && session.token && !adminTokenInput.value) {
-    adminTokenInput.value = session.token;
-    saveToken(session.token);
+  if (session.token) {
+    localStorage.setItem(TOKEN_STORAGE_KEY, session.token);
   }
   return session;
 }
@@ -183,26 +172,19 @@ statusFilter?.addEventListener('change', () => {
   fetchOrders({ status: statusFilter.value, limit: limitInput.value });
 });
 
-saveTokenButton?.addEventListener('click', () => {
-  saveToken(adminTokenInput.value.trim());
-  fetchOrders({ status: statusFilter.value, limit: limitInput.value });
-});
+logoutButton?.addEventListener('click', handleLogout);
 
 window.addEventListener('load', () => {
   const session = ensureSession();
   if (!session) return;
-
-  const storedToken = getToken();
-  if (storedToken && adminTokenInput) {
-    adminTokenInput.value = storedToken;
-  }
   fetchOrders({ status: statusFilter.value, limit: limitInput.value });
 });
 
 async function updateStatus(id, status) {
-  const token = getToken();
+  const token = getSession()?.token;
   if (!token) {
-    alert('Set your admin token first.');
+    alert('Session expired or unauthorized. Please login again.');
+    handleLogout();
     return;
   }
 
@@ -214,6 +196,7 @@ async function updateStatus(id, status) {
       headers: {
         'Content-Type': 'application/json',
         'x-admin-token': token,
+        'x-admin-actor': getSession()?.email || 'ops-user',
       },
       body: JSON.stringify({ id, status }),
     });
@@ -234,5 +217,5 @@ async function updateStatus(id, status) {
 function handleLogout() {
   sessionStorage.removeItem(SESSION_STORAGE_KEY);
   localStorage.removeItem(TOKEN_STORAGE_KEY);
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 }

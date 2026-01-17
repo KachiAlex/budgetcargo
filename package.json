@@ -21,6 +21,7 @@
     "shx": "^0.3.4"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.2"
+    "@neondatabase/serverless": "^1.0.2",
+    "bcryptjs": "^3.0.3"
   }
 }

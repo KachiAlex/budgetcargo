@@ -32,12 +32,27 @@ async function main() {
       grand_total numeric not null,
       status text not null default 'queued',
       timeline jsonb not null default '[]'::jsonb,
-      created_at timestamptz not null default now()
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now()
     )
   `;
 
   await sql`create index if not exists orders_reference_idx on public.orders(reference)`;
   await sql`create index if not exists orders_status_idx on public.orders(status)`;
+
+  await sql`alter table public.orders add column if not exists updated_at timestamptz not null default now()`;
+
+  await sql`
+    create table if not exists public.admin_accounts (
+      id uuid primary key default uuid_generate_v4(),
+      email text not null unique,
+      password_hash text not null,
+      api_token text not null unique,
+      created_at timestamptz not null default now()
+    )
+  `;
+
+  console.log('Admin accounts table ready.');
 
   console.log('Orders table ready.');
 }
