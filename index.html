@@ -7,8 +7,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles-enhanced.css" />
     <script defer src="app.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.lucide) lucide.createIcons();
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      });
+    </script>
   </head>
   <body>
     <div class="page-shell">
@@ -102,7 +113,7 @@
           </div>
         </section>
 
-        <section class="section" id="services">
+        <section class="section reveal" id="services">
           <div class="section-heading">
             <p class="eyebrow">What we handle</p>
             <h2>End-to-end logistics built for UK shopping fans in Malawi.</h2>
@@ -112,25 +123,29 @@
           </div>
           <div class="grid grid-services">
             <article>
+              <div class="service-icon"><i data-lucide="shopping-bag"></i></div>
               <h3>Shop & Ship</h3>
               <p>Send parcels from Amazon, ASOS, eBay & more to our Leeds hub. We consolidate without extra fees.</p>
             </article>
             <article>
+              <div class="service-icon"><i data-lucide="clipboard-check"></i></div>
               <h3>Admin & Duty</h3>
               <p>Flat MK&nbsp;5,000 admin on clothes & general goods. Spare parts admin MK&nbsp;15,000 with duty guidance.</p>
             </article>
             <article>
+              <div class="service-icon"><i data-lucide="truck"></i></div>
               <h3>Door-to-Door</h3>
               <p>Pick up from our Lilongwe office, Blantyre partner depot, or request premium home delivery.</p>
             </article>
             <article>
+              <div class="service-icon"><i data-lucide="bell-ring"></i></div>
               <h3>Automated Tracking</h3>
               <p>Realtime SMS, WhatsApp, and email alerts as soon as parcels hit each milestone.</p>
             </article>
           </div>
         </section>
 
-        <section class="section price-section" id="pricing">
+        <section class="section price-section reveal" id="pricing">
           <div class="section-heading inline">
             <div>
               <p class="eyebrow">Transparent pricing</p>
@@ -143,61 +158,62 @@
           <div class="price-grid">
             <article>
               <p class="tier">0 – 5kg</p>
-              <p class="price">£45</p>
+              <p class="price">£45 <span class="unit">flat</span></p>
               <p class="description">Perfect for sneakers, accessories, compact gadgets.</p>
             </article>
             <article>
               <p class="tier">5 – 10kg</p>
-              <p class="price">£82</p>
+              <p class="price">£82 <span class="unit">flat</span></p>
               <p class="description">Great for mixed apparel hauls and household items.</p>
             </article>
             <article>
               <p class="tier">10 – 20kg</p>
-              <p class="price">£8.30 / kg</p>
+              <p class="price">£8.30 <span class="unit">/ kg</span></p>
               <p class="description">Scale up with mid-sized electronics or bulk beauty stock.</p>
             </article>
-            <article>
+            <article class="price-popular">
+              <span class="popular-badge"><i data-lucide="star" class="badge-icon"></i>Best value</span>
               <p class="tier">20kg+</p>
-              <p class="price">£7.50 / kg</p>
+              <p class="price">£7.50 <span class="unit">/ kg</span></p>
               <p class="description">Best value for resellers & community group shipments.</p>
             </article>
           </div>
         </section>
 
-        <section class="section automation" id="automation">
+        <section class="section automation reveal" id="automation">
           <div class="automation-card">
             <div>
               <p class="eyebrow">Automation spotlight</p>
               <h2>Order orchestration that works while you sleep.</h2>
               <ul class="tick-list">
-                <li>Instant intake numbers for every parcel.</li>
-                <li>Auto-handled customs paperwork and HS codes.</li>
-                <li>Smart routing to Lilongwe / Blantyre with ETAs.</li>
-                <li>Payment links triggered once weight is confirmed.</li>
+                <li><i data-lucide="check-circle-2" class="tick-icon"></i> Instant intake numbers for every parcel.</li>
+                <li><i data-lucide="check-circle-2" class="tick-icon"></i> Auto-handled customs paperwork and HS codes.</li>
+                <li><i data-lucide="check-circle-2" class="tick-icon"></i> Smart routing to Lilongwe / Blantyre with ETAs.</li>
+                <li><i data-lucide="check-circle-2" class="tick-icon"></i> Payment links triggered once weight is confirmed.</li>
               </ul>
             </div>
             <div class="timeline">
               <div class="timeline-row">
-                <span>1</span>
-                <p>Parcel lands at Leeds hub • automated photograph + weight capture.</p>
+                <span><i data-lucide="package" class="step-icon"></i></span>
+                <p><strong>Parcel lands at Leeds hub</strong> — automated photograph + weight capture.</p>
               </div>
               <div class="timeline-row">
-                <span>2</span>
-                <p>Consolidation window closes • SMS sent with draft invoice.</p>
+                <span><i data-lucide="file-check" class="step-icon"></i></span>
+                <p><strong>Consolidation window closes</strong> — SMS sent with draft invoice.</p>
               </div>
               <div class="timeline-row">
-                <span>3</span>
-                <p>Flight departs to Malawi • customs pre-clearance initiated.</p>
+                <span><i data-lucide="plane" class="step-icon"></i></span>
+                <p><strong>Flight departs to Malawi</strong> — customs pre-clearance initiated.</p>
               </div>
               <div class="timeline-row">
-                <span>4</span>
-                <p>Ready for pickup • WhatsApp bot schedules delivery slot.</p>
+                <span><i data-lucide="handshake" class="step-icon"></i></span>
+                <p><strong>Ready for pickup</strong> — WhatsApp bot schedules delivery slot.</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="section order" id="order">
+        <section class="section order reveal" id="order">
           <div class="section-heading">
             <p class="eyebrow">Automated order desk</p>
             <h2>Share your parcel details and get an instant estimate.</h2>
@@ -205,53 +221,71 @@
           </div>
           <div class="order-grid">
             <form class="order-form" id="orderForm">
-              <label>
-                Full name
-                <input type="text" name="name" placeholder="Chimwemwe Banda" required />
+              <label class="floating-label">
+                <input type="text" name="name" placeholder=" " required />
+                <span>Full name</span>
               </label>
-              <label>
-                Email address
-                <input type="email" name="email" placeholder="you@example.com" required />
+              <label class="floating-label">
+                <input type="email" name="email" placeholder=" " required />
+                <span>Email address</span>
               </label>
-              <label>
-                WhatsApp / Phone
-                <input type="tel" name="phone" placeholder="+265 997 948 857" required />
+              <label class="floating-label">
+                <input type="tel" name="phone" placeholder=" " required />
+                <span>WhatsApp / Phone</span>
               </label>
-              <label>
-                Parcel description
-                <textarea name="description" rows="3" placeholder="3x sneakers, 1x tablet" required></textarea>
+              <label class="floating-label">
+                <textarea name="description" rows="3" placeholder=" " required></textarea>
+                <span>Parcel description</span>
               </label>
-              <label>
-                Total weight (kg)
-                <input type="number" name="weight" step="0.1" min="0.5" required />
+              <label class="floating-label">
+                <input type="number" name="weight" step="0.1" min="0.5" placeholder=" " required />
+                <span>Total weight (kg)</span>
               </label>
-              <label>
-                Delivery preference
+              <label class="floating-label select-label">
                 <select name="delivery" required>
+                  <option value="" disabled selected></option>
                   <option value="office">Collect at Lilongwe office</option>
                   <option value="blantyre">Collect at Blantyre partner depot</option>
                   <option value="home">Premium home delivery</option>
                 </select>
+                <span>Delivery preference</span>
               </label>
               <div class="checkbox-group">
-                <label>
+                <label class="checkbox-card">
                   <input type="checkbox" name="priority" />
-                  Priority flight slot (+£12)
+                  <div class="checkbox-content">
+                    <strong>Priority flight slot</strong>
+                    <small>+£12 — Skip the queue for faster processing</small>
+                  </div>
                 </label>
-                <label>
+                <label class="checkbox-card">
                   <input type="checkbox" name="insurance" />
-                  Enhanced insurance (+£6)
+                  <div class="checkbox-content">
+                    <strong>Enhanced insurance</strong>
+                    <small>+£6 — Full coverage for peace of mind</small>
+                  </div>
                 </label>
               </div>
-              <button type="submit" class="cta">Generate Quote</button>
+              <button type="submit" class="cta cta-large">
+                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                Generate Quote
+              </button>
             </form>
             <div class="order-summary" id="orderSummary">
-              <p class="eyebrow">Live summary</p>
-              <h3>Awaiting your form...</h3>
-              <p class="summary-desc">Share your parcel details to see the automation kick in.</p>
+              <div class="summary-empty">
+                <div class="summary-empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                </div>
+                <p class="eyebrow">Live summary</p>
+                <h3>Awaiting your form</h3>
+                <p class="summary-desc">Fill out your parcel details and an instant quote will appear here.</p>
+              </div>
               <ul></ul>
               <div class="summary-actions" id="summaryActions" hidden>
-                <button class="cta" type="button" id="paymentButton">Proceed to Payment</button>
+                <button class="cta" type="button" id="paymentButton">
+                  <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                  Proceed to Payment
+                </button>
                 <button class="ghost secondary" type="button" id="whatsappButton">Send to WhatsApp</button>
               </div>
             </div>
