@@ -32,6 +32,7 @@ async function main() {
       grand_total numeric not null,
       status text not null default 'queued',
       timeline jsonb not null default '[]'::jsonb,
+      stripe_session_id text,
       created_at timestamptz not null default now(),
       updated_at timestamptz not null default now()
     )
@@ -41,6 +42,7 @@ async function main() {
   await sql`create index if not exists orders_status_idx on public.orders(status)`;
 
   await sql`alter table public.orders add column if not exists updated_at timestamptz not null default now()`;
+  await sql`alter table public.orders add column if not exists stripe_session_id text`;
 
   await sql`
     create table if not exists public.admin_accounts (

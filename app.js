@@ -1,3 +1,28 @@
+function showToast(message, duration = 4000) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+  }, duration);
+}
+
+(function handlePaymentRedirect() {
+  const params = new URLSearchParams(window.location.search);
+  const payment = params.get('payment');
+  const ref = params.get('ref');
+  if (payment === 'success') {
+    showToast(ref ? `Payment successful · ${ref}` : 'Payment successful', 6000);
+    window.history.replaceState({}, '', window.location.pathname);
+  } else if (payment === 'cancel') {
+    showToast(ref ? `Payment cancelled · ${ref}` : 'Payment cancelled', 4000);
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+})();
+
 const orderForm = document.getElementById('orderForm');
 const orderSummary = document.getElementById('orderSummary');
 const summaryTitle = orderSummary?.querySelector('h3');
@@ -66,10 +91,41 @@ function renderSummary(items, reference, nextSteps = []) {
   }
 }
 
-paymentButton?.addEventListener('click', () => {
+function storeQuoteAmount(amount) {
+  paymentButton?.setAttribute('data-amount', String(amount));
+}
+
+paymentButton?.addEventListener('click', async () => {
   const reference = paymentButton.getAttribute('data-reference');
-  if (!reference) return;
-  alert(`Payment collection occurs after weighing. Reference ${reference} has been queued.`);
+  const amount = parseFloat(paymentButton.getAttribute('data-amount'));
+  if (!reference || Number.isNaN(amount)) return;
+
+  paymentButton.disabled = true;
+  paymentButton.textContent = 'Redirecting to Stripe…';
+
+  try {
+    const response = await fetch('/api/payment/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reference, amount }),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => ({}));
+      throw new Error(errorBody.error || 'Failed to start payment');
+    }
+
+    const { url } = await response.json();
+    if (url) {
+      window.location.href = url;
+    } else {
+      throw new Error('No checkout URL returned');
+    }
+  } catch (error) {
+    alert(error.message || 'Unable to start payment. Please try again.');
+    paymentButton.disabled = false;
+    paymentButton.textContent = 'Proceed to Payment';
+  }
 });
 
 whatsappButton?.addEventListener('click', () => {
@@ -136,17 +192,10 @@ orderForm?.addEventListener('submit', async (event) => {
       delivery: result.delivery,
     });
     renderSummary(summaryItems, result.reference, result.nextSteps);
+    storeQuoteAmount(result.quote.grandTotal);
     orderSummary.classList.add('active');
 
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = `Automation triggered · ${result.reference}`;
-    document.body.appendChild(toast);
-    requestAnimationFrame(() => toast.classList.add('show'));
-    setTimeout(() => {
-      toast.classList.remove('show');
-      toast.addEventListener('transitionend', () => toast.remove(), { once: true });
-    }, 4000);
+    showToast(`Automation triggered · ${result.reference}`);
 
     orderForm.reset();
   } catch (error) {
