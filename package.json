@@ -1,0 +1,27 @@
+{
+  "name": "budgetcargo",
+  "version": "1.0.0",
+  "description": "BudgetCargo - Logistics platform for UK-Malawi shipping",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx serve . -p 3000 -o",
+    "build": "shx rm -rf public && shx mkdir -p public && shx cp index.html public/index.html && shx cp styles.css public/styles.css && shx cp app.js public/app.js && shx cp admin.html public/admin.html && shx cp admin.js public/admin.js && shx cp login.html public/login.html && shx cp login.js public/login.js && shx cp logo.jpg public/logo.jpg && shx cp -r api public/api"
+  },
+  "keywords": [
+    "logistics",
+    "shipping",
+    "uk-malawi",
+    "cargo"
+  ],
+  "author": "BudgetCargo",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1",
+    "shx": "^0.3.4"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "bcryptjs": "^3.0.3"
+  }
+}
