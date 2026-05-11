@@ -1,70 +1,3 @@
-function showToast(message, duration = 4000) {
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => toast.classList.add('show'));
-  setTimeout(() => {
-    toast.classList.remove('show');
-    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
-  }, duration);
-}
-
-// Hamburger Menu Toggle
-(function initHamburgerMenu() {
-  const hamburgerMenu = document.getElementById('hamburgerMenu');
-  const navDrawer = document.getElementById('navDrawer');
-  const navDrawerClose = document.getElementById('navDrawerClose');
-  const navDrawerLinks = document.querySelectorAll('.nav-drawer-links a');
-
-  if (!hamburgerMenu || !navDrawer) return;
-
-  // Toggle drawer on hamburger click
-  hamburgerMenu.addEventListener('click', () => {
-    hamburgerMenu.classList.toggle('active');
-    navDrawer.classList.toggle('active');
-    document.body.style.overflow = navDrawer.classList.contains('active') ? 'hidden' : '';
-  });
-
-  // Close drawer on close button click
-  navDrawerClose?.addEventListener('click', () => {
-    hamburgerMenu.classList.remove('active');
-    navDrawer.classList.remove('active');
-    document.body.style.overflow = '';
-  });
-
-  // Close drawer when clicking on a link
-  navDrawerLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      hamburgerMenu.classList.remove('active');
-      navDrawer.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-  });
-
-  // Close drawer when clicking outside (on the overlay)
-  navDrawer.addEventListener('click', (e) => {
-    if (e.target === navDrawer) {
-      hamburgerMenu.classList.remove('active');
-      navDrawer.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  });
-})();
-
-(function handlePaymentRedirect() {
-  const params = new URLSearchParams(window.location.search);
-  const payment = params.get('payment');
-  const ref = params.get('ref');
-  if (payment === 'success') {
-    showToast(ref ? `Payment successful · ${ref}` : 'Payment successful', 6000);
-    window.history.replaceState({}, '', window.location.pathname);
-  } else if (payment === 'cancel') {
-    showToast(ref ? `Payment cancelled · ${ref}` : 'Payment cancelled', 4000);
-    window.history.replaceState({}, '', window.location.pathname);
-  }
-})();
-
 const orderForm = document.getElementById('orderForm');
 const orderSummary = document.getElementById('orderSummary');
 const summaryTitle = orderSummary?.querySelector('h3');
@@ -133,41 +66,10 @@ function renderSummary(items, reference, nextSteps = []) {
   }
 }
 
-function storeQuoteAmount(amount) {
-  paymentButton?.setAttribute('data-amount', String(amount));
-}
-
-paymentButton?.addEventListener('click', async () => {
+paymentButton?.addEventListener('click', () => {
   const reference = paymentButton.getAttribute('data-reference');
-  const amount = parseFloat(paymentButton.getAttribute('data-amount'));
-  if (!reference || Number.isNaN(amount)) return;
-
-  paymentButton.disabled = true;
-  paymentButton.textContent = 'Redirecting to Stripe…';
-
-  try {
-    const response = await fetch('/api/payment/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reference, amount }),
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.json().catch(() => ({}));
-      throw new Error(errorBody.error || 'Failed to start payment');
-    }
-
-    const { url } = await response.json();
-    if (url) {
-      window.location.href = url;
-    } else {
-      throw new Error('No checkout URL returned');
-    }
-  } catch (error) {
-    alert(error.message || 'Unable to start payment. Please try again.');
-    paymentButton.disabled = false;
-    paymentButton.textContent = 'Proceed to Payment';
-  }
+  if (!reference) return;
+  alert(`Payment collection occurs after weighing. Reference ${reference} has been queued.`);
 });
 
 whatsappButton?.addEventListener('click', () => {
@@ -234,10 +136,17 @@ orderForm?.addEventListener('submit', async (event) => {
       delivery: result.delivery,
     });
     renderSummary(summaryItems, result.reference, result.nextSteps);
-    storeQuoteAmount(result.quote.grandTotal);
     orderSummary.classList.add('active');
 
-    showToast(`Automation triggered · ${result.reference}`);
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = `Automation triggered · ${result.reference}`;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, 4000);
 
     orderForm.reset();
   } catch (error) {
