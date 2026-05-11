@@ -6,170 +6,266 @@
     <title>BudgetCargo | UK ↔ Malawi Logistics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <script defer src="app.js"></script>
   </head>
   <body>
     <div class="page-shell">
       <header class="site-header">
-        <div class="brand">
-          <img src="logo.jpg" alt="BudgetCargo" class="logo-mark" />
-          <div>
-            <span class="brand-name">BudgetCargo</span>
-            <p class="brand-tagline">UK ➜ Malawi Logistics</p>
+        <div class="container header-inner">
+          <div class="brand">
+            <img src="logo.jpg" alt="BudgetCargo" class="logo-mark" />
           </div>
+          <nav class="nav-links">
+            <a href="#process">How it works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#quote">Get quote</a>
+            <a href="#contact">Contact</a>
+          </nav>
         </div>
-        <nav class="nav-links">
-          <a href="#services">Services</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#automation">Automation</a>
-          <a href="#order">Order</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <a class="cta" href="#order">Book a Shipment</a>
       </header>
 
       <main>
-        <section class="hero">
-          <div class="hero-content">
-            <p class="hero-badge">
-              <span class="flag">🇬🇧</span>
-              <span>UK Fulfilment</span>
-              <span class="arrow">➜</span>
-              <span class="flag">🇲🇼</span>
-              <span>Malawi Delivery</span>
-            </p>
-            <h1>Ship smart between the UK and Malawi without breaking the bank.</h1>
-            <p class="hero-lede">
-              We consolidate your online shopping, clear customs, and deliver right to Lilongwe & Blantyre with transparent pricing and automated status alerts.
-            </p>
-            <div class="hero-actions">
-              <a class="cta" href="#order">Start an Order</a>
-              <button class="ghost" data-scroll="#pricing">View Price List</button>
+        <section class="hero" id="top">
+          <div class="hero-bg" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1699498648836-945c2c60912b?auto=format&fit=crop&w=2000&q=80" alt="Airplane at sunset" />
+          </div>
+          <div class="hero-inner container">
+            <div class="hero-copy">
+              <p class="hero-pill">🇬🇧 UK ↦ 🇲🇼 Malawi</p>
+              <h1>Rewrite how UK carts land in Lilongwe.</h1>
+              <p>
+                BudgetCargo blends warehouse automation, customs prep, and WhatsApp ops so Malawi shoppers get parcels in days—not months.
+              </p>
+              <div class="hero-actions">
+                <a class="cta" href="#quote">Launch a shipment</a>
+                <button class="ghost" data-scroll="#flights">View flight slate</button>
+              </div>
             </div>
             <div class="hero-stats">
               <article>
-                <p class="stat-value">7.5&nbsp;£/kg</p>
-                <p class="stat-label">Economy freight from 20kg+</p>
+                <p class="stat-label">Average intake</p>
+                <p class="stat-value">96 hrs</p>
+                <span>Store checkout ➝ Manifest</span>
               </article>
               <article>
-                <p class="stat-value">96&nbsp;hrs</p>
-                <p class="stat-label">Average UK warehouse processing</p>
+                <p class="stat-label">Coverage</p>
+                <p class="stat-value">Lilongwe · Blantyre</p>
+                <span>Home or pickup hub</span>
               </article>
               <article>
+                <p class="stat-label">Automation</p>
                 <p class="stat-value">24/7</p>
-                <p class="stat-label">Automated tracking & notifications</p>
+                <span>WhatsApp bots & email rails</span>
               </article>
             </div>
-          </div>
-          <div class="hero-banner" aria-label="BudgetCargo flyer inspired collage">
-            <div class="banner-row">
-              <div class="banner-card photo-card primary">
-                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80" alt="Happy shopper receiving parcels" loading="lazy" />
-                <div class="photo-caption">You shop it • We ship it</div>
-              </div>
-              <div class="banner-card price-card">
-                <p class="price-chip">From £7.5 per kg</p>
-                <h3>Landscape freight board</h3>
-                <ul class="price-callouts">
-                  <li><span>0-5kg</span><strong>£45</strong></li>
-                  <li><span>5-10kg</span><strong>£82</strong></li>
-                  <li><span>10-20kg</span><strong>£8.3/kg</strong></li>
-                  <li><span>20kg+</span><strong>£7.5/kg</strong></li>
-                </ul>
-                <p class="price-footnote">Inclusive of duty & customs. Spare parts admin MK 15,000.</p>
-              </div>
-            </div>
-            <div class="banner-row">
-              <div class="banner-card photo-card secondary">
-                <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80" alt="Cargo jet and containers" loading="lazy" />
-                <div class="flag-track">🇬🇧 ➜ 🇲🇼 Express Lane</div>
-              </div>
-              <div class="banner-card info-card">
-                <p class="eyebrow">Touchpoints</p>
-                <h3>24 Hilton Rd · LS8 4HA</h3>
-                <h3>35 Foxhill Ct · LS16 5PN</h3>
-                <p>Pickups in Lilongwe CBD & Blantyre Ginnery Corner.</p>
-                <div class="info-grid">
-                  <div>
-                    <span class="label">Tracking</span>
-                    <strong>WhatsApp + Email</strong>
-                  </div>
-                  <div>
-                    <span class="label">Dispatch</span>
-                    <strong>Every Friday</strong>
-                  </div>
-                </div>
+            <div class="hero-trust">
+              <span>Trusted by diaspora shopping clubs, boutique resellers, and family shippers.</span>
+              <div class="hero-trust-tags">
+                <span>ASOS hauls</span>
+                <span>Zara drops</span>
+                <span>Parts consignments</span>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="section" id="services">
+        <section class="manifest">
+          <div class="container">
+          <div class="manifest-card">
+            <div class="manifest-head">
+              <div>
+                <p>Manifest · 342-B</p>
+                <h2>Leeds consolidation closes in 04:12</h2>
+              </div>
+              <span class="badge">Live lane</span>
+            </div>
+            <ul class="manifest-checklist">
+              <li>Parcel photos + weight captured</li>
+              <li>Duty simulation complete</li>
+              <li>Payment links waiting for confirmation</li>
+            </ul>
+            <div class="manifest-stats">
+              <div>
+                <p class="label">Parcels</p>
+                <strong>128</strong>
+              </div>
+              <div>
+                <p class="label">Capacity</p>
+                <strong>78%</strong>
+              </div>
+              <div>
+                <p class="label">ETD</p>
+                <strong>Fri · 18:00</strong>
+              </div>
+            </div>
+            <div class="manifest-flight">
+              <div>
+                <h3>🇬🇧 Leeds ➝ 🇲🇼 Lilongwe</h3>
+                <p>Dispatch every Friday, pickups Monday & Wednesday. WhatsApp +265 997 948 857 for status pulses.</p>
+              </div>
+              <div class="flight-track">
+                <span>Intake</span>
+                <span>Customs</span>
+                <span>Delivery</span>
+              </div>
+              <div class="manifest-pill">£7.5 / kg econ · +£12 priority slot · Insurance £6</div>
+            </div>
+          </div>
+          </div>
+        </section>
+
+        <section class="section process" id="process">
+          <div class="container">
           <div class="section-heading">
-            <p class="eyebrow">What we handle</p>
-            <h2>End-to-end logistics built for UK shopping fans in Malawi.</h2>
-            <p>
-              Use our UK addresses for your favourite stores, consolidate everything and let us deal with customs, duty, and last-mile delivery.
-            </p>
+            <p class="eyebrow">What this corridor includes</p>
+            <h2>From cart to collected parcel, every touchpoint is scripted.</h2>
+            <p>Drop your UK deliveries at our Leeds hubs, and we orchestrate consolidation, customs, and the last kilometre with obsessive transparency.</p>
           </div>
-          <div class="grid grid-services">
+          <div class="process-grid">
             <article>
-              <h3>Shop & Ship</h3>
-              <p>Send parcels from Amazon, ASOS, eBay & more to our Leeds hub. We consolidate without extra fees.</p>
+              <div class="process-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" focusable="false"><path d="M3 6h18v3H3V6zm2 5h14v7H5v-7zm4 2v3h6v-3H9z" /></svg>
+              </div>
+              <p class="label">01 · Intake</p>
+              <h3>Shop & stage</h3>
+              <p>Use 24 Hilton Rd or 35 Foxhill Ct as your shipping address. We scan, photograph, and log every box within minutes.</p>
+              <ul>
+                <li>Unlimited retailer deliveries</li>
+                <li>No consolidation fee</li>
+                <li>Instant WhatsApp receipt</li>
+              </ul>
             </article>
             <article>
-              <h3>Admin & Duty</h3>
-              <p>Flat MK&nbsp;5,000 admin on clothes & general goods. Spare parts admin MK&nbsp;15,000 with duty guidance.</p>
+              <div class="process-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3l9 4v6c0 5-4 8-9 8s-9-3-9-8V7l9-4zm0 2.2L6 7.3v5.2c0 3.7 2.8 5.9 6 5.9s6-2.2 6-5.9V7.3l-6-2.1zm-1 4.3h2v3h3v2h-5V9.5z" /></svg>
+              </div>
+              <p class="label">02 · Compliance</p>
+              <h3>Duty handled</h3>
+              <p>We model HS codes, apply flat admin (MK 5,000 / MK 15,000), and prep customs clearance before the plane leaves.</p>
+              <ul>
+                <li>Automated valuation engine</li>
+                <li>Live quote against parcel weight</li>
+                <li>GBP or MWK invoicing</li>
+              </ul>
             </article>
             <article>
-              <h3>Door-to-Door</h3>
-              <p>Pick up from our Lilongwe office, Blantyre partner depot, or request premium home delivery.</p>
+              <div class="process-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm1 4h16v8H4V9zm2 2v4h12v-4H6zm-1 8h14v2H5v-2z" /></svg>
+              </div>
+              <p class="label">03 · Delivery</p>
+              <h3>Home or hub</h3>
+              <p>Pick up in Lilongwe CBD, Blantyre Ginnery Corner, or request premium home delivery with crew ETA tracking.</p>
+              <ul>
+                <li>Dispatch notifications</li>
+                <li>Bike + van partners</li>
+                <li>Optional insurance & priority</li>
+              </ul>
             </article>
-            <article>
-              <h3>Automated Tracking</h3>
-              <p>Realtime SMS, WhatsApp, and email alerts as soon as parcels hit each milestone.</p>
-            </article>
+          </div>
           </div>
         </section>
 
-        <section class="section price-section" id="pricing">
-          <div class="section-heading inline">
-            <div>
-              <p class="eyebrow">Transparent pricing</p>
-              <h2>Flat rates inspired by our flyer deals.</h2>
-            </div>
-            <div class="price-note">
-              <p>Prices include duty & customs. Some categories may attract surcharges—we'll confirm before invoicing.</p>
-            </div>
+        <section class="section flight-slate" id="flights">
+          <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Flight slate</p>
+            <h2>Reserve space before the manifest locks.</h2>
+            <p>We treat every Friday dispatch like a product launch.</p>
           </div>
-          <div class="price-grid">
+          <div class="flight-grid">
+            <article class="flight-card primary">
+              <div class="flight-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M2 16l20-5-20-5v5l12 0-12 0v5z" /></svg>
+              </div>
+              <p class="label">Next flight</p>
+              <h3>18:00 · Friday</h3>
+              <p class="route">Leeds ➝ Lilongwe</p>
+              <ul>
+                <li>
+                  <span>Capacity</span>
+                  <strong>78% · 320kg free</strong>
+                </li>
+                <li>
+                  <span>Cut-off</span>
+                  <strong>Thursday 12:00</strong>
+                </li>
+                <li>
+                  <span>Onward pickups</span>
+                  <strong>Monday</strong>
+                </li>
+              </ul>
+            </article>
+            <article class="flight-card">
+              <div class="flight-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 4h12v2H4zm0 4h16v2H4zm0 4h10v2H4z" /></svg>
+              </div>
+              <p class="label">Overflow</p>
+              <h3>Charter boost</h3>
+              <p class="route">Leeds ➝ Blantyre</p>
+              <ul>
+                <li>+£1.2/kg surcharge</li>
+                <li>Ideal for bulk inventory</li>
+                <li>Customs escorted</li>
+              </ul>
+            </article>
+            <article class="flight-card">
+              <div class="flight-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 4h4l3 5h7a3 3 0 013 3v2h-2v6h-3v-6h-4l-3 5H5l3-5H3v-2h5l-3-5z" /></svg>
+              </div>
+              <p class="label">Ground reality</p>
+              <h3>2 pickup nodes</h3>
+              <p class="route">City Centre · Ginnery Corner</p>
+              <ul>
+                <li>Home delivery add-on £9</li>
+                <li>WhatsApp scheduling bot</li>
+                <li>Cash or transfer accepted</li>
+              </ul>
+            </article>
+          </div>
+          </div>
+        </section>
+
+        <section class="section pricing" id="pricing">
+          <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Transparent pricing</p>
+            <h2>Choose a lane, not a mystery surcharge.</h2>
+            <p>Duty + customs included. Spare parts admin MK 15,000. We flag edge cases before you pay.</p>
+          </div>
+          <div class="pricing-grid">
             <article>
-              <p class="tier">0 – 5kg</p>
-              <p class="price">£45</p>
-              <p class="description">Perfect for sneakers, accessories, compact gadgets.</p>
+              <p class="label">0 – 5kg</p>
+              <h3>£45 <span>flat</span></h3>
+              <p>Perfect for sneaker drops, accessories, compact gadgets.</p>
             </article>
             <article>
-              <p class="tier">5 – 10kg</p>
-              <p class="price">£82</p>
-              <p class="description">Great for mixed apparel hauls and household items.</p>
+              <p class="label">5 – 10kg</p>
+              <h3>£82 <span>flat</span></h3>
+              <p>Mixed apparel hauls and homewares land in one bundle.</p>
             </article>
             <article>
-              <p class="tier">10 – 20kg</p>
-              <p class="price">£8.30 / kg</p>
-              <p class="description">Scale up with mid-sized electronics or bulk beauty stock.</p>
+              <p class="label">10 – 20kg</p>
+              <h3>£8.30 <span>/ kg</span></h3>
+              <p>Level up with electronics or bulk beauty inventory.</p>
             </article>
-            <article>
-              <p class="tier">20kg+</p>
-              <p class="price">£7.50 / kg</p>
-              <p class="description">Best value for resellers & community group shipments.</p>
+            <article class="featured">
+              <p class="label">20kg+</p>
+              <h3>£7.50 <span>/ kg</span></h3>
+              <p>Best value for resellers & community pooling.</p>
             </article>
+          </div>
+          <p class="pricing-foot">Add-ons: Priority slot £12 · Insurance £6 · Premium home delivery £9 (Lilongwe) / £11 (Blantyre).</p>
           </div>
         </section>
 
         <section class="section automation" id="automation">
-          <div class="automation-card">
+          <div class="container">
+          <div class="automation-grid">
             <div>
               <p class="eyebrow">Automation spotlight</p>
               <h2>Order orchestration that works while you sleep.</h2>
@@ -180,62 +276,70 @@
                 <li>Payment links triggered once weight is confirmed.</li>
               </ul>
             </div>
-            <div class="timeline">
-              <div class="timeline-row">
+            <div class="automation-steps">
+              <article>
                 <span>1</span>
                 <p>Parcel lands at Leeds hub • automated photograph + weight capture.</p>
-              </div>
-              <div class="timeline-row">
+              </article>
+              <article>
                 <span>2</span>
                 <p>Consolidation window closes • SMS sent with draft invoice.</p>
-              </div>
-              <div class="timeline-row">
+              </article>
+              <article>
                 <span>3</span>
                 <p>Flight departs to Malawi • customs pre-clearance initiated.</p>
-              </div>
-              <div class="timeline-row">
+              </article>
+              <article>
                 <span>4</span>
                 <p>Ready for pickup • WhatsApp bot schedules delivery slot.</p>
-              </div>
+              </article>
             </div>
+          </div>
           </div>
         </section>
 
-        <section class="section order" id="order">
+        <section class="section order" id="quote">
+          <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Automated order desk</p>
             <h2>Share your parcel details and get an instant estimate.</h2>
             <p>We'll email you a consolidation ID and prep customs forms immediately.</p>
           </div>
           <div class="order-grid">
-            <form class="order-form" id="orderForm">
-              <label>
-                Full name
+            <form class="order-form" id="orderForm" novalidate>
+              <label class="input-field">
+                <span>Full name</span>
                 <input type="text" name="name" placeholder="Chimwemwe Banda" required />
+                <span class="input-error" data-error-for="name" aria-live="polite"></span>
               </label>
-              <label>
-                Email address
+              <label class="input-field">
+                <span>Email address</span>
                 <input type="email" name="email" placeholder="you@example.com" required />
+                <span class="input-error" data-error-for="email" aria-live="polite"></span>
               </label>
-              <label>
-                WhatsApp / Phone
+              <label class="input-field">
+                <span>WhatsApp / Phone</span>
                 <input type="tel" name="phone" placeholder="+265 997 948 857" required />
+                <span class="input-error" data-error-for="phone" aria-live="polite"></span>
               </label>
-              <label>
-                Parcel description
+              <label class="input-field">
+                <span>Parcel description</span>
                 <textarea name="description" rows="3" placeholder="3x sneakers, 1x tablet" required></textarea>
+                <span class="input-error" data-error-for="description" aria-live="polite"></span>
               </label>
-              <label>
-                Total weight (kg)
+              <label class="input-field">
+                <span>Total weight (kg)</span>
                 <input type="number" name="weight" step="0.1" min="0.5" required />
+                <span class="input-error" data-error-for="weight" aria-live="polite"></span>
               </label>
-              <label>
-                Delivery preference
+              <label class="input-field">
+                <span>Delivery preference</span>
                 <select name="delivery" required>
                   <option value="office">Collect at Lilongwe office</option>
                   <option value="blantyre">Collect at Blantyre partner depot</option>
                   <option value="home">Premium home delivery</option>
                 </select>
+                <span class="input-error" data-error-for="delivery" aria-live="polite"></span>
               </label>
               <div class="checkbox-group">
                 <label>
@@ -250,9 +354,10 @@
               <button type="submit" class="cta">Generate Quote</button>
             </form>
             <div class="order-summary" id="orderSummary">
-              <p class="eyebrow">Live summary</p>
-              <h3>Awaiting your form...</h3>
-              <p class="summary-desc">Share your parcel details to see the automation kick in.</p>
+              <div class="summary-head">
+                <h3>Live summary</h3>
+                <p class="summary-desc">Share your parcel details to see the automation kick in.</p>
+              </div>
               <ul></ul>
               <div class="summary-actions" id="summaryActions" hidden>
                 <button class="cta" type="button" id="paymentButton">Proceed to Payment</button>
@@ -260,30 +365,58 @@
               </div>
             </div>
           </div>
+          </div>
+        </section>
+
+        <section class="section contact" id="contact">
+          <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Contact us</p>
+            <h2>Rewriting UK-Malawi logistics, one parcel at a time.</h2>
+          </div>
+          <div class="contact-grid">
+            <article>
+              <h3>Phone</h3>
+              <a href="tel:+447756168494">+44 7756 168 494</a>
+              <a href="tel:+265997948857">+265 997 948 857</a>
+            </article>
+            <article>
+              <h3>Email</h3>
+              <a href="mailto:budgetcargomw@gmail.com">budgetcargomw@gmail.com</a>
+            </article>
+            <article>
+              <h3>Social</h3>
+              <p>@budget_cargo</p>
+              <p>#YouShopItWeShipIt</p>
+            </article>
+          </div>
+          <div class="contact-locations">
+            <div>
+              <h4>UK drop-off</h4>
+              <p>24 Hilton Road, Chapel Allerton, Leeds LS8 4HA</p>
+              <p>35 Foxhill Court, Weetwood Lane, Leeds LS16 5PN</p>
+            </div>
+            <div>
+              <h4>Malawi pickup</h4>
+              <p>City Centre, Lilongwe • Opposite Reserve Bank</p>
+              <p>Ginnery Corner, Blantyre • Cargo Wing</p>
+            </div>
+          </div>
+          <div class="contact-cta">
+            <div>
+              <p class="eyebrow">Need live support?</p>
+              <h3>WhatsApp our operations desk for instant manifests.</h3>
+            </div>
+            <a class="cta ghost-light" href="https://wa.me/447756168494" target="_blank" rel="noreferrer">Message on WhatsApp</a>
+          </div>
+          </div>
         </section>
       </main>
 
-      <footer class="footer" id="contact">
-        <div>
-          <h4>Contact us</h4>
-          <p class="contact-line">☎️ +44 7756 168 494</p>
-          <p class="contact-line">☎️ +265 997 948 857</p>
-          <p class="contact-line">✉️ budgetcargomw@gmail.com</p>
-        </div>
-        <div>
-          <h4>UK drop-off</h4>
-          <p>24 Hilton Road, Chapel Allerton, Leeds LS8 4HA</p>
-          <p>35 Foxhill Court, Weetwood Lane, Leeds LS16 5PN</p>
-        </div>
-        <div>
-          <h4>Malawi pickup</h4>
-          <p>City Centre, Lilongwe • Opposite Reserve Bank</p>
-          <p>Ginnery Corner, Blantyre • Cargo Wing</p>
-        </div>
-        <div>
-          <h4>Social</h4>
-          <p>@budget_cargo</p>
-          <p>#YouShopItWeShipIt</p>
+      <footer class="footer">
+        <div class="container">
+          <p>Corridor OS · BudgetCargo</p>
+          <p>Rewriting UK-Malawi logistics, one parcel at a time.</p>
         </div>
       </footer>
     </div>

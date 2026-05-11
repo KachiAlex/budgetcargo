@@ -1,3 +1,49 @@
+function setFieldError(input, message = '') {
+  const errorElement = document.querySelector(`.input-error[data-error-for="${input.name}"]`);
+  if (!errorElement) return;
+
+  if (message) {
+    input.classList.add('error');
+    errorElement.textContent = message;
+  } else {
+    input.classList.remove('error');
+    errorElement.textContent = '';
+  }
+}
+
+function validateField(input) {
+  let validityMessage = '';
+  if (input.validity.valueMissing) {
+    validityMessage = 'Required field';
+  } else if (input.type === 'email' && input.validity.typeMismatch) {
+    validityMessage = 'Enter a valid email';
+  } else if (input.type === 'number' && input.validity.rangeUnderflow) {
+    validityMessage = `Minimum ${input.min}kg`;
+  }
+
+  setFieldError(input, validityMessage);
+  return !validityMessage;
+}
+
+function validateForm() {
+  if (!orderForm) return false;
+  const inputs = orderForm.querySelectorAll('input[required], textarea[required], select[required]');
+  let isValid = true;
+  inputs.forEach((input) => {
+    if (!validateField(input)) {
+      isValid = false;
+    }
+  });
+  return isValid;
+}
+
+orderForm?.addEventListener('input', (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) return;
+  if (target.required) {
+    validateField(target);
+  }
+});
 const orderForm = document.getElementById('orderForm');
 const orderSummary = document.getElementById('orderSummary');
 const summaryTitle = orderSummary?.querySelector('h3');
@@ -9,6 +55,7 @@ const paymentButton = document.getElementById('paymentButton');
 const whatsappButton = document.getElementById('whatsappButton');
 const summaryActions = document.getElementById('summaryActions');
 const scrollButtons = document.querySelectorAll('[data-scroll]');
+const errorFields = document.querySelectorAll('.input-error');
 
 scrollButtons.forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -98,12 +145,12 @@ async function submitOrder(payload) {
 orderForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const formData = new FormData(orderForm);
-  const weight = parseFloat(formData.get('weight'));
-  if (!weight || Number.isNaN(weight)) {
-    orderForm.reportValidity();
+  if (!validateForm()) {
     return;
   }
+
+  const formData = new FormData(orderForm);
+  const weight = parseFloat(formData.get('weight'));
 
   const payload = {
     name: formData.get('name').trim(),
@@ -149,6 +196,7 @@ orderForm?.addEventListener('submit', async (event) => {
     }, 4000);
 
     orderForm.reset();
+    errorFields.forEach((field) => (field.textContent = ''));
   } catch (error) {
     alert(error.message || 'Unable to submit order. Please try again.');
   } finally {
