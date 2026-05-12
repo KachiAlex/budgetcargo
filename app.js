@@ -1,3 +1,16 @@
+const orderForm = document.getElementById('orderForm');
+const orderSummary = document.getElementById('orderSummary');
+const summaryTitle = orderSummary?.querySelector('h3');
+const summaryDesc = orderSummary?.querySelector('.summary-desc');
+const summaryList = orderSummary?.querySelector('ul');
+const summaryAlert = document.createElement('p');
+summaryAlert.className = 'summary-alert';
+const paymentButton = document.getElementById('paymentButton');
+const whatsappButton = document.getElementById('whatsappButton');
+const summaryActions = document.getElementById('summaryActions');
+const scrollButtons = document.querySelectorAll('[data-scroll]');
+const errorFields = document.querySelectorAll('.input-error');
+
 function setFieldError(input, message = '') {
   const errorElement = document.querySelector(`.input-error[data-error-for="${input.name}"]`);
   if (!errorElement) return;
@@ -44,18 +57,6 @@ orderForm?.addEventListener('input', (event) => {
     validateField(target);
   }
 });
-const orderForm = document.getElementById('orderForm');
-const orderSummary = document.getElementById('orderSummary');
-const summaryTitle = orderSummary?.querySelector('h3');
-const summaryDesc = orderSummary?.querySelector('.summary-desc');
-const summaryList = orderSummary?.querySelector('ul');
-const summaryAlert = document.createElement('p');
-summaryAlert.className = 'summary-alert';
-const paymentButton = document.getElementById('paymentButton');
-const whatsappButton = document.getElementById('whatsappButton');
-const summaryActions = document.getElementById('summaryActions');
-const scrollButtons = document.querySelectorAll('[data-scroll]');
-const errorFields = document.querySelectorAll('.input-error');
 
 scrollButtons.forEach((btn) => {
   btn.addEventListener('click', () => {
