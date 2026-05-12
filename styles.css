@@ -31,6 +31,25 @@ body {
   font-feature-settings: "ss02" on, "case" on;
 }
 
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 1rem;
+  background: #ffffff;
+  color: var(--blue-dark);
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+  transition: top 0.2s ease, box-shadow 0.2s ease;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2);
+}
+
 .dashboard-body {
   background: #0a1931;
   min-height: 100vh;

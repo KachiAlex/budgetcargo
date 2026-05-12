@@ -4,28 +4,84 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BudgetCargo | UK ↔ Malawi Logistics</title>
-    <link rel="icon" type="image/png" href="logo.jpg" />
+    <meta
+      name="description"
+      content="BudgetCargo runs UK to Malawi logistics with automated intake, customs prep, and WhatsApp status so shipments land in days—not months."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://budgetcargo.vercel.app/" />
+    <meta property="og:title" content="BudgetCargo | UK ↔ Malawi Logistics" />
+    <meta
+      property="og:description"
+      content="Automated intake, customs prep, and on-ground delivery for UK shoppers sending to Lilongwe and Blantyre."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://budgetcargo.vercel.app/" />
+    <meta property="og:site_name" content="BudgetCargo" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content="https://budgetcargo.vercel.app/logo.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="BudgetCargo | UK ↔ Malawi Logistics" />
+    <meta
+      name="twitter:description"
+      content="BudgetCargo blends warehouse automation, customs prep, and WhatsApp ops so Malawi shoppers get parcels in days."
+    />
+    <meta name="twitter:image" content="https://budgetcargo.vercel.app/logo.jpg" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#0f172a" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.jpg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.jpg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="logo.jpg" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1699498648836-945c2c60912b?auto=format&fit=crop&w=2000&q=80&fm=webp" />
     <link rel="stylesheet" href="styles.css" />
     <script defer src="app.js"></script>
+    <script defer data-domain="budgetcargo.vercel.app" src="https://plausible.io/js/script.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "BudgetCargo",
+        "url": "https://budgetcargo.vercel.app/",
+        "logo": "https://budgetcargo.vercel.app/logo.jpg",
+        "sameAs": [
+          "https://www.instagram.com/",
+          "https://twitter.com/"
+        ],
+        "description": "BudgetCargo delivers UK to Malawi shipments with automated intake, customs prep, and transparent pricing."
+      }
+    </script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div class="page-shell">
       <header class="site-header">
         <div class="container header-inner">
           <div class="brand">
-            <img src="logo.jpg" alt="BudgetCargo" class="logo-mark" />
+            <img src="logo.jpg" alt="BudgetCargo" class="logo-mark" decoding="async" fetchpriority="high" />
             <div class="brand-text">
               <span class="brand-name">BudgetCargo</span>
-              <span class="brand-tagline">UK ↦ Malawi logistics</span>
+              <span class="brand-tagline">UK ↔ Malawi logistics</span>
             </div>
           </div>
-          <nav class="nav-links">
+          <nav class="nav-links" aria-label="Primary">
             <a href="#process">How it works</a>
             <a href="#pricing">Pricing</a>
             <a href="#quote">Get quote</a>
@@ -34,10 +90,17 @@
         </div>
       </header>
 
-      <main>
+      <main id="main-content" role="main">
         <section class="hero" id="top">
           <div class="hero-bg" aria-hidden="true">
-            <img src="https://images.unsplash.com/photo-1699498648836-945c2c60912b?auto=format&fit=crop&w=2000&q=80" alt="Airplane at sunset" />
+            <img
+              src="https://images.unsplash.com/photo-1699498648836-945c2c60912b?auto=format&fit=crop&w=2000&q=80&fm=webp"
+              alt=""
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+              aria-hidden="true"
+            />
           </div>
           <div class="hero-inner container">
             <div class="hero-grid">
@@ -49,12 +112,12 @@
                 </p>
                 <div class="hero-actions">
                   <a class="cta" href="#quote">Launch a shipment</a>
-                  <button class="ghost" data-scroll="#flights">View flight slate</button>
+                  <button class="ghost" data-scroll="#flights" type="button">View flight slate</button>
                 </div>
                 <ul class="hero-highlights">
-                  <li><span>🚚</span> Consolidation hubs in Leeds & Birmingham</li>
-                  <li><span>📦</span> Photo + weight logs within 2 hours</li>
-                  <li><span>💬</span> WhatsApp pulses for each stage</li>
+                  <li><span aria-hidden="true">🚚</span> Consolidation hubs in Leeds & Birmingham</li>
+                  <li><span aria-hidden="true">📦</span> Photo + weight logs within 2 hours</li>
+                  <li><span aria-hidden="true">💬</span> WhatsApp pulses for each stage</li>
                 </ul>
               </div>
               <div class="hero-aside">
