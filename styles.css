@@ -315,6 +315,7 @@ a {
 .brand {
   display: flex;
   align-items: center;
+  gap: 0.8rem;
 }
 
 .logo-mark {
@@ -333,10 +334,18 @@ a {
   text-transform: uppercase;
 }
 
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
 .brand-tagline {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .nav-links {
@@ -497,10 +506,11 @@ main {
 .hero {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 28px;
   margin: 0 auto clamp(1.5rem, 4vw, 3rem);
-  min-height: 420px;
+  min-height: 500px;
   background: #020617;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .hero-bg {
@@ -532,37 +542,28 @@ main {
 .hero-inner {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 3rem;
-  align-items: center;
-  padding: clamp(2rem, 6vw, 4rem) 0;
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
   color: #fff;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: stretch;
 }
 
 @media (max-width: 900px) {
   .hero-inner {
+    padding: clamp(2rem, 7vw, 3rem) 0;
+  }
+
+  .hero-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .hero-stats {
-    max-width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  
-  .hero-stats article {
-    flex: 1 1 calc(50% - 0.4rem);
-    min-width: 150px;
   }
 }
 
 @media (max-width: 600px) {
-  .hero-stats article {
-    flex: 1 1 100%;
-  }
-  
   .hero-copy {
     max-width: 100%;
   }
@@ -570,6 +571,53 @@ main {
   .cta {
     width: 100%;
   }
+}
+
+.hero-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero-aside-card {
+  background: rgba(2, 6, 23, 0.6);
+  border-radius: 20px;
+  padding: 1.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.45);
+}
+
+.hero-aside-label {
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hero-highlights {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hero-highlights li {
+  background: rgba(2, 6, 23, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.hero-highlights span {
+  font-size: 1.1rem;
 }
 
 .hero-copy {
@@ -617,10 +665,9 @@ main {
 }
 
 .hero-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  max-width: 280px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
 }
 
 .hero-stats article {
@@ -698,7 +745,7 @@ main {
 .hero-trust {
   font-size: 0.9rem;
   color: #dbeafe;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .hero-trust-tags {
@@ -753,6 +800,33 @@ main {
 .manifest-head h2 {
   margin: 0;
   font-size: clamp(2rem, 3vw, 2.6rem);
+}
+
+.manifest-progress {
+  margin: 0 0 1.5rem;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.5rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #34d399, #60a5fa);
 }
 
 .badge {
@@ -838,9 +912,14 @@ main {
 }
 
 .process-grid article {
-  padding: 0 1rem;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  padding: 1.75rem;
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
   animation: fade-slide-up 0.8s ease-out backwards;
+  border-radius: 1.5rem;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+  min-height: 100%;
 }
 
 .process-grid article:nth-child(1) {
@@ -860,7 +939,8 @@ main {
 }
 
 .process-grid article:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  box-shadow: 0 30px 55px rgba(15, 23, 42, 0.12);
 }
 
 .process-icon,
@@ -897,6 +977,10 @@ main {
 .process-grid h3 {
   font-size: 1.7rem;
   margin: 0.4rem 0 1rem;
+}
+
+.process-grid p {
+  color: var(--text-muted);
 }
 
 .process-grid ul {
@@ -951,6 +1035,28 @@ main {
 .flight-card.primary:hover {
   border-color: var(--blue);
   box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+}
+
+.flight-card .route {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.flight-card ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flight-card ul li span {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.flight-card ul li strong {
+  font-size: 0.95rem;
+  color: var(--text-dark);
 }
 
 .flight-card .label {
@@ -1058,6 +1164,10 @@ main {
   align-items: center;
 }
 
+.automation-grid p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .tick-list {
   list-style: none;
   padding: 0;
@@ -1078,29 +1188,33 @@ main {
 }
 
 .automation-steps {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1rem;
 }
 
 .automation-steps article {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 1rem 1.3rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
-  gap: 0.8rem;
   align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.automation-steps span {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: rgba(59, 130, 246, 0.25);
+.automation-steps article span {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   display: grid;
   place-items: center;
   font-weight: 600;
+}
+
+.automation-steps article p {
+  margin: 0;
 }
 
 .automation-steps p {
