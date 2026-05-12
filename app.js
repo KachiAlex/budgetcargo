@@ -145,7 +145,7 @@ function buildSummaryItems(data) {
   ];
 }
 
-function renderSummary(items, reference, nextSteps = []) {
+function renderSummary(items, reference, nextSteps = [], amount = null) {
   if (!summaryList || !summaryTitle || !summaryDesc) return;
 
   summaryTitle.textContent = `Quote ready · Ref ${reference}`;
@@ -165,13 +165,18 @@ function renderSummary(items, reference, nextSteps = []) {
   if (summaryActions) {
     summaryActions.hidden = false;
     paymentButton?.setAttribute('data-reference', reference);
+    paymentButton?.setAttribute('data-amount', amount || '0');
     whatsappButton?.setAttribute('data-reference', reference);
   }
 }
 
 paymentButton?.addEventListener('click', async () => {
   const reference = paymentButton.getAttribute('data-reference');
-  if (!reference) return;
+  const amount = parseFloat(paymentButton.getAttribute('data-amount') || '0');
+  if (!reference || amount <= 0) {
+    alert('Quote information not available. Please generate a quote first.');
+    return;
+  }
 
   const originalText = paymentButton.textContent;
   paymentButton.disabled = true;
@@ -181,7 +186,7 @@ paymentButton?.addEventListener('click', async () => {
     const response = await fetch('/api/payment/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reference }),
+      body: JSON.stringify({ reference, amount }),
     });
 
     if (!response.ok) {
@@ -266,7 +271,7 @@ orderForm?.addEventListener('submit', async (event) => {
       reference: result.reference,
       delivery: result.delivery,
     });
-    renderSummary(summaryItems, result.reference, result.nextSteps);
+    renderSummary(summaryItems, result.reference, result.nextSteps, result.quote.grandTotal);
     orderSummary.classList.add('active');
 
     const toast = document.createElement('div');
@@ -307,7 +312,7 @@ orderForm?.addEventListener('submit', async (event) => {
     renderSummary(summaryItems, reference, [
       'Quote generated locally',
       'Contact us to confirm and proceed to payment',
-    ]);
+    ], clientQuote.grandTotal);
     orderSummary.classList.add('active');
 
     const toast = document.createElement('div');
