@@ -455,7 +455,7 @@ main {
   position: relative;
   overflow: hidden;
   border-radius: 36px;
-  margin: clamp(2rem, 5vw, 4rem) auto;
+  margin: 0 auto clamp(2rem, 5vw, 4rem);
   min-height: 560px;
   background: #020617;
 }

@@ -74,6 +74,61 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
+function computeClientSideQuote(weight, priority, insurance, delivery) {
+  let baseCost;
+  let baseLabel;
+
+  if (weight <= 5) {
+    baseCost = 45;
+    baseLabel = '0 – 5kg flat rate';
+  } else if (weight <= 10) {
+    baseCost = 82;
+    baseLabel = '5 – 10kg flat rate';
+  } else if (weight <= 20) {
+    baseCost = weight * 8.3;
+    baseLabel = '10 – 20kg band';
+  } else {
+    baseCost = weight * 7.5;
+    baseLabel = '20kg+ economy rate';
+  }
+
+  let addOnTotal = 0;
+  const addOns = [];
+
+  if (priority) {
+    addOnTotal += 12;
+    addOns.push('Priority flight (+£12)');
+  }
+
+  if (insurance) {
+    addOnTotal += 6;
+    addOns.push('Enhanced insurance (+£6)');
+  }
+
+  const grandTotal = baseCost + addOnTotal;
+
+  let deliveryLabel;
+  switch (delivery) {
+    case 'home':
+      deliveryLabel = 'Premium home delivery';
+      break;
+    case 'blantyre':
+      deliveryLabel = 'Blantyre partner depot';
+      break;
+    default:
+      deliveryLabel = 'Lilongwe HQ pickup';
+  }
+
+  return {
+    baseLabel,
+    baseAmount: baseCost,
+    addOnTotal,
+    grandTotal,
+    addOns,
+    delivery: deliveryLabel,
+  };
+}
+
 function buildSummaryItems(data) {
   const { name, email, phone, description, weight, delivery, addOns, quote, reference } = data;
 
@@ -113,10 +168,38 @@ function renderSummary(items, reference, nextSteps = []) {
   }
 }
 
-paymentButton?.addEventListener('click', () => {
+paymentButton?.addEventListener('click', async () => {
   const reference = paymentButton.getAttribute('data-reference');
   if (!reference) return;
-  alert(`Payment collection occurs after weighing. Reference ${reference} has been queued.`);
+
+  const originalText = paymentButton.textContent;
+  paymentButton.disabled = true;
+  paymentButton.textContent = 'Processing...';
+
+  try {
+    const response = await fetch('/api/payment/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reference }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.error || 'Payment initialization failed');
+    }
+
+    const { url } = await response.json();
+    if (url) {
+      window.location.href = url;
+    } else {
+      throw new Error('No payment URL returned');
+    }
+  } catch (error) {
+    alert(error.message || 'Unable to initialize payment. Please try again.');
+  } finally {
+    paymentButton.disabled = false;
+    paymentButton.textContent = originalText;
+  }
 });
 
 whatsappButton?.addEventListener('click', () => {
@@ -198,7 +281,46 @@ orderForm?.addEventListener('submit', async (event) => {
     orderForm.reset();
     errorFields.forEach((field) => (field.textContent = ''));
   } catch (error) {
-    alert(error.message || 'Unable to submit order. Please try again.');
+    console.error('API submission failed, using client-side calculation:', error);
+    
+    const clientQuote = computeClientSideQuote(
+      payload.weight,
+      payload.priority,
+      payload.insurance,
+      payload.delivery
+    );
+    
+    const reference = `BC-${new Date().getFullYear()}-${Math.floor(Math.random() * 900000 + 100000)}`;
+    
+    const summaryItems = buildSummaryItems({
+      ...payload,
+      addOns: clientQuote.addOns,
+      quote: {
+        baseLabel: clientQuote.baseLabel,
+        grandTotal: clientQuote.grandTotal,
+      },
+      reference,
+      delivery: clientQuote.delivery,
+    });
+    
+    renderSummary(summaryItems, reference, [
+      'Quote generated locally',
+      'Contact us to confirm and proceed to payment',
+    ]);
+    orderSummary.classList.add('active');
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = `Quote generated · ${reference}`;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, 4000);
+
+    orderForm.reset();
+    errorFields.forEach((field) => (field.textContent = ''));
   } finally {
     if (submitButton) {
       submitButton.disabled = false;
